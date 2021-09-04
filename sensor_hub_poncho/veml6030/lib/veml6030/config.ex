@@ -1,5 +1,5 @@
 defmodule VEML6030.Config do
-  defstruct gain: :gain_1_4_th,
+  defstruct gain: :gain_1_4th,
             int_time: :it_100_ms,
             shutdown: false,
             interrupt: false
@@ -27,9 +27,10 @@ defmodule VEML6030.Config do
 
   defp gain(:gain_1x), do: 0b0
   defp gain(:gain_2x), do: 0b01
-  defp gain(:gain_1_8_th), do: 0b10
-  defp gain(:gain_1_4_th), do: 0b11
+  defp gain(:gain_1_8th), do: 0b10
+  defp gain(:gain_1_4th), do: 0b11
   defp gain(:gain_default), do: 0b11
+
   defp int_time(:it_25_ms), do: 0b1100
   defp int_time(:it_50_ms), do: 0b1000
   defp int_time(:it_100_ms), do: 0b0000
