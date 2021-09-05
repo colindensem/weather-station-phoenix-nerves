@@ -12,7 +12,7 @@ Uk based, components sourced from [CoolComponents](https://coolcomponents.co.uk/
 The SGP30 from the book wasn't available locally, the SGP40 was suggested as alternative.
 However it's not detected in the early phases of the book, so:
 
-```
+```elixir
 iex(1)> Circuits.I2C.detect_devices()
 Devices on I2C bus "i2c-1":
  * 72  (0x48)
@@ -23,7 +23,7 @@ Devices on I2C bus "i2c-1":
 
 As the book progresses it introduces some HEX packages for wrapping the calls to the sensor. Oddly the SGP40 package works. There are notes that the I2C does not always detect the sensor. Thus this works:
 
-```
+```elixir
 iex(2)> {:ok, sgp} = SGP40.start_link(bus_name: "i2c-1")
 {:ok, #PID<0.1281.0>}
 iex(3)> SGP40.measure(sgp)
@@ -34,7 +34,7 @@ Need to clean my air! 5k is the ax, with low to high being great to dire air qua
 
 Playing with the SGP40 & BMP280 wrapper:
 
-```
+```elixir
 iex(4)> BMP280.start_link([i2c_address: 0x77, name: BMP280])
 {:ok, #PID<0.1285.0>}
 iex(5)> {:ok, measurement} = BMP280.read(BMP280)
@@ -55,3 +55,22 @@ iex(7)> SGP40.measure(sgp)
  ```
 
 Not a huge improvement, but proof enough the sensors work.
+
+
+### Chapter3 Sensor.measure
+
+As I wasn't using the SGP30, some additional notes on the SGP40 which is a different interface. It's similar to the BMP280.
+
+```elixir
+iex(1)> {:ok, sgp} = SGP40.start_link(bus_name: "i2c-1", name: SGP40)
+{:ok, #PID<0.1281.0>}
+iex(2)> voc = Sensor.new(SGP40)
+%SensorHub.Sensor{
+  convert: #Function<2.9234919/1 in SensorHub.Sensor.convert_fn/1>,
+  fields: [:voc_index],
+  name: SGP40,
+  read: #Function<5.9234919/0 in SensorHub.Sensor.read_fn/1>
+}
+iex(3)> Sensor.measure(voc)
+%{voc_index: 108}
+```
